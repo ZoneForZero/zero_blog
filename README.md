@@ -3,10 +3,7 @@
 
 # 系统说明
 本项目由gin_web_template脚手架为基础开发的 go服务端
-https://github.com/Gourouting/singo
-
-自行实现了国际化i18n的一些基本功能
-本项目是使用基于cookie实现的session来保存登录状态的，如果需要可以自行修改为token验证
+https://github.com/ZoneForZero/gin_web_template
 
 ## 使用的组件
 1. [Gin](https://github.com/gin-gonic/gin): 轻量级Web框架，自称路由速度是golang最快的 
