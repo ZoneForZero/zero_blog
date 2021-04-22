@@ -1,15 +1,15 @@
 package main
 
 import (
-	"zero_blog/conf"
-	"zero_blog/routers"
+	CONF "zero_blog/conf"
+	ROUTERS "zero_blog/routers"
 )
 
 func main() {
 	// 从配置文件读取配置
-	conf.Init()
+	CONF.Init()
 
 	// 装载路由
-	r := routers.AllRouter()
+	r := ROUTERS.AllRouter()
 	r.Run(":3000")
 }
