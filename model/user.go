@@ -8,11 +8,11 @@ import (
 // User 用户模型
 type User struct {
 	GORM.Model
-	UserName       string
-	PasswordDigest string
-	Nickname       string
-	Status         string
-	Avatar         string `gorm:"size:1000"`
+	NickName       string	`gorm:"size:255"`
+	Account        string	`gorm:"not null;primary_key;size:16"`
+	Password       string	`gorm:"not null"`
+	OpenId         string   `gorm:""`
+	Level          int 		`gorm:"not null"`
 }
 
 const (
@@ -26,8 +26,8 @@ const (
 	Suspend string = "suspend"
 )
 
-// GetUser 用ID获取用户
-func GetUser(ID interface{}) (User, error) {
+// GetUserById 用ID获取用户
+func GetUserById(ID interface{}) (User, error) {
 	var user User
 	result := DB.First(&user, ID)
 	return user, result.Error
@@ -39,12 +39,12 @@ func (user *User) SetPassword(password string) error {
 	if err != nil {
 		return err
 	}
-	user.PasswordDigest = string(bytes)
+	user.Password = string(bytes)
 	return nil
 }
 
 // CheckPassword 校验密码
 func (user *User) CheckPassword(password string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(user.PasswordDigest), []byte(password))
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
 	return err == nil
 }

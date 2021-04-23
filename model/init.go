@@ -20,6 +20,8 @@ func Database(connString string) {
 	// Error
 	if err != nil {
 		UTIL.Log().Panic("连接数据库不成功", err)
+	} else {
+		UTIL.Log().Println("连接Mysql成功!")
 	}
 	//设置连接池
 	//空闲
@@ -28,8 +30,8 @@ func Database(connString string) {
 	db.DB().SetMaxOpenConns(100)
 	//超时
 	db.DB().SetConnMaxLifetime(time.Second * 30)
-
+	// 全局禁用表名复数
+	db.SingularTable(true)
 	DB = db
-
 	migration()
 }

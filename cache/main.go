@@ -25,6 +25,8 @@ func Redis() {
 
 	if err != nil {
 		UTIL.Log().Panic("连接Redis不成功", err)
+	} else {
+		UTIL.Log().Println("连接Redis成功!")
 	}
 
 	RedisClient = client
