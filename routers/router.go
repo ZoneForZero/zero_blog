@@ -3,7 +3,7 @@ package routers
 import (
 	"os"
 	CONTROLLER "zero_blog/controller"
-	MIDDLEWARE "zero_blog/middleware"
+	MIDDLEWARE "zero_blog/MIDDLEWARE"
 
 	"github.com/gin-gonic/gin"
 )

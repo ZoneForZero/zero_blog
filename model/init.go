@@ -3,10 +3,7 @@ package model
 import (
 	UTIL "zero_blog/util"
 	"time"
-
 	GORM "github.com/jinzhu/gorm"
-
-	//
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
@@ -34,4 +31,10 @@ func Database(connString string) {
 	db.SingularTable(true)
 	DB = db
 	migration()
+}
+
+//执行数据迁移
+func migration() {
+	// 自动迁移模式
+	DB.AutoMigrate(&User{})
 }

@@ -23,7 +23,7 @@ func CurrentUser() gin.HandlerFunc {
 	}
 }
 
-// AuthRequired 需要登录
+// 权限拦截
 func AuthRequired() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		if user, _ := ctx.Get("user"); user != nil {
@@ -32,7 +32,7 @@ func AuthRequired() gin.HandlerFunc {
 				return
 			}
 		}
-
+		// 返回未登录提示
 		ctx.JSON(200, SERIALIZER.CheckLogin())
 		ctx.Abort()
 	}
