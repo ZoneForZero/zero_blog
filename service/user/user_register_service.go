@@ -24,8 +24,8 @@ func (service *UserRegisterService) valid() *SERIALIZER.Response {
 	}
 
 	// 账号和名称唯一
-	checkFieldNames:= []string{"account", "nick_name"}
-	checkValue := []string{service.Account,service.NickName}
+	checkFieldNames := []string{"account", "nick_name"}
+	checkValue := []string{service.Account, service.NickName}
 	checkLength := 2
 	for i := 0; i < checkLength; i++ {
 		count := 0
@@ -50,33 +50,33 @@ func (service *UserRegisterService) valid() *SERIALIZER.Response {
 	return nil
 }
 
-// Register 用户注册
-func (service *UserRegisterService) Register() SERIALIZER.Response {
-	user := MODEL.User{
-		NickName: service.NickName,
-		Account: service.Account,
-		OpenId: service.OpenId,
-		Level: 1,
-	}
+// // Register 用户注册
+// func (service *UserRegisterService) Register() SERIALIZER.Response {
+// 	user := MODEL.User{
+// 		NickName: service.NickName,
+// 		Account: service.Account,
+// 		OpenId: service.OpenId,
+// 		Level: 1,
+// 	}
 
-	// 表单验证
-	if err := service.valid(); err != nil {
-		return *err
-	}
+// 	// 表单验证
+// 	if err := service.valid(); err != nil {
+// 		return *err
+// 	}
 
-	// 加密密码
-	if err := user.SetPassword(service.Password); err != nil {
-		return SERIALIZER.Err(
-			SERIALIZER.CodeEncryptError,
-			"密码加密失败",
-			err,
-		)
-	}
+// 	// 加密密码
+// 	if err := user.SetPassword(service.Password); err != nil {
+// 		return SERIALIZER.Err(
+// 			SERIALIZER.CodeEncryptError,
+// 			"密码加密失败",
+// 			err,
+// 		)
+// 	}
 
-	// 创建用户
-	if err := MODEL.DB.Create(&user).Error; err != nil {
-		return SERIALIZER.ParamErr("注册失败", err)
-	}
+// 	// 创建用户
+// 	if err := MODEL.DB.Create(&user).Error; err != nil {
+// 		return SERIALIZER.ParamErr("注册失败", err)
+// 	}
 
-	return SERIALIZER.BuildUserResponse(user)
-}
+// 	return SERIALIZER.BuildUserResponse(user)
+// }

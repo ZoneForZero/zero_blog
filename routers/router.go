@@ -2,8 +2,8 @@ package routers
 
 import (
 	"os"
-	CONTROLLER "zero_blog/controller"
 	MIDDLEWARE "zero_blog/MIDDLEWARE"
+	CONTROLLER "zero_blog/controller"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,13 +17,14 @@ func AllRouter() *gin.Engine {
 	router.Use(MIDDLEWARE.Cors())
 	router.Use(MIDDLEWARE.CurrentUser())
 	// 路由分组，testRouter的路由前面默认为/testRouter/
+	router.GET("wxLogin", CONTROLLER.AppletWeChatLogin)
 	testRouter := router.Group("/testRouter")
 	{
 		testRouter.GET("ping", CONTROLLER.Ping)
 		// 用户注册
-		testRouter.POST("user/register", CONTROLLER.UserRegister)
+		// testRouter.POST("user/register", CONTROLLER.UserRegister)
 		// 用户登录
-		testRouter.POST("user/login", CONTROLLER.UserLogin)
+		// testRouter.POST("user/login", CONTROLLER.UserLogin)
 		// 需要登录保护的
 		auth := testRouter.Group("")
 		auth.Use(MIDDLEWARE.AuthRequired())

@@ -2,7 +2,6 @@ package service
 
 import (
 	MODEL "zero_blog/model"
-	SERIALIZER "zero_blog/serializer"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -22,20 +21,20 @@ func (service *UserLoginService) setSession(c *gin.Context, user MODEL.User) {
 	s.Save()
 }
 
-// Login 用户登录函数
-func (service *UserLoginService) Login(c *gin.Context) SERIALIZER.Response {
-	var user MODEL.User
+// // Login 用户登录函数
+// func (service *UserLoginService) Login(c *gin.Context) SERIALIZER.Response {
+// 	var user MODEL.User
 
-	if err := MODEL.DB.Where("user_name = ?", service.UserName).First(&user).Error; err != nil {
-		return SERIALIZER.ParamErr("账号或密码错误", nil)
-	}
+// 	if err := MODEL.DB.Where("user_name = ?", service.UserName).First(&user).Error; err != nil {
+// 		return SERIALIZER.ParamErr("账号或密码错误", nil)
+// 	}
 
-	if user.CheckPassword(service.Password) == false {
-		return SERIALIZER.ParamErr("账号或密码错误", nil)
-	}
+// 	if user.CheckPassword(service.Password) == false {
+// 		return SERIALIZER.ParamErr("账号或密码错误", nil)
+// 	}
 
-	// 设置session
-	service.setSession(c, user)
+// 	// 设置session
+// 	service.setSession(c, user)
 
-	return SERIALIZER.BuildUserResponse(user)
-}
+// 	return SERIALIZER.BuildUserResponse(user)
+// }

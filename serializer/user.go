@@ -15,12 +15,12 @@ type User struct {
 // 转换函数    model.User  ->  User
 func BuildUser(user MODEL.User) User {
 	return User{
-		ID:         user.ID,
-		NickName:   user.NickName,
-		Account:    user.Account,
-		OpenId:     user.OpenId,
+		ID:       user.ID,
+		NickName: user.NickName,
+		// Account:    user.Account,
+		OpenId: user.OpenId,
 		// Level:      user.Level,
-		CreatedAt:  user.CreatedAt.Unix(),
+		CreatedAt: user.CreatedAt.Unix(),
 	}
 }
 
