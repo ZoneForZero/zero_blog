@@ -18,6 +18,8 @@ func AllRouter() *gin.Engine {
 	router.Use(MIDDLEWARE.CurrentUser())
 	// 路由分组，testRouter的路由前面默认为/testRouter/
 	router.GET("wxLogin", CONTROLLER.AppletWeChatLogin)
+	router.GET("article/:id", CONTROLLER.GetArticle)
+
 	testRouter := router.Group("/testRouter")
 	{
 		testRouter.GET("ping", CONTROLLER.Ping)

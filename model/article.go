@@ -13,7 +13,7 @@ type ArticleInfo struct {
 }
 type ArticleContent struct {
 	GORM.Model
-	AtricleId int    `gorm:"not null"`
+	ArticleId int    `gorm:"not null"`
 	Content   string `gorm:"not null;type:text"`
 	// Account        string	`gorm:"not null;primary_key;size:16"`
 	// Password       string	`gorm:"not null"`
@@ -27,13 +27,13 @@ func GetArticlesByAuthor(authorId int) ([]ArticleInfo, error) {
 }
 
 // 获取文章详情
-func GetArticle(id int) (ArticleInfo, ArticleContent,error, error) {
+func GetArticle(id int) (ArticleInfo, ArticleContent, error, error) {
 	var articleInfo ArticleInfo
 	var content ArticleContent
 	infoResult := DB.First(&articleInfo, id)
-	contentResult := DB.First(&ArticleContent, ArticleInfo{AtricleId: id})
-	return infoResult, contentResult, infoResult.Error, contentResult.Error
+	contentResult := DB.First(&content, ArticleContent{ArticleId: id})
+	return articleInfo, content, infoResult.Error, contentResult.Error
 }
 
-func AddArticle(userId int, title string, content string) {
-}
+// func AddArticle(userId int, title string, content string) {
+// }
