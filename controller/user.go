@@ -35,6 +35,7 @@ import (
 // UserMe 用户详情
 func UserMe(ctx *gin.Context) {
 	user := CurrentUser(ctx)
+	// user Model对象转换成用户数据
 	res := SERIALIZER.BuildUserResponse(*user)
 	ctx.JSON(200, res)
 }

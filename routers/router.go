@@ -19,6 +19,10 @@ func AllRouter() *gin.Engine {
 	// 路由分组，testRouter的路由前面默认为/testRouter/
 	router.GET("wxLogin", CONTROLLER.AppletWeChatLogin)
 	router.GET("article/:id", CONTROLLER.GetArticle)
+	router.GET("articles", CONTROLLER.GetArticles)
+	router.POST("article", CONTROLLER.AddArticle)
+
+
 
 	testRouter := router.Group("/testRouter")
 	{

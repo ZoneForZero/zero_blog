@@ -2,12 +2,13 @@ package model
 
 import (
 	GORM "github.com/jinzhu/gorm"
+	// "fmt"
 )
 
 type ArticleInfo struct {
 	GORM.Model
 	AuthorId int    `gorm:"not null"`
-	Title    string `gorm:"not null;size:255"`
+	Title    string `gorm:"not null;size:30"`
 	// Account        string	`gorm:"not null;primary_key;size:16"`
 	// Password       string	`gorm:"not null"`
 }
@@ -34,6 +35,42 @@ func GetArticle(id int) (ArticleInfo, ArticleContent, error, error) {
 	contentResult := DB.First(&content, ArticleContent{ArticleId: id})
 	return articleInfo, content, infoResult.Error, contentResult.Error
 }
+
+// 获取文章列表
+func GetArticles() ([]ArticleInfo, error) {
+	var articles []ArticleInfo
+	articlesDbResult := DB.Find(&articles)
+	return articles, articlesDbResult.Error
+}
+
+
+func AddArticle(title string, content string, userId int) error {
+	var infoDbObj = ArticleInfo {
+		AuthorId: userId,
+		Title: title,
+	}
+	var contentDbObj = ArticleContent {
+		ArticleId: 0,
+		Content:content,
+	}
+	// 找不到记录
+	if err := DB.Create(&infoDbObj).Error; err != nil {
+		return err
+	}
+	// 取創建的id進行關聯
+	var infoObj ArticleInfo
+	createResult := DB.First(&infoObj, infoDbObj)
+	if createResult.Error != nil {
+		return createResult.Error
+	}
+	contentDbObj.ArticleId = int(infoObj.ID)
+	if err := DB.Create(&contentDbObj).Error; err != nil {
+		// 回滾删除info数据
+		return err
+	}
+	return nil
+}
+
 
 // func AddArticle(userId int, title string, content string) {
 // }

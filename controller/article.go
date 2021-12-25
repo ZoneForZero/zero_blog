@@ -4,11 +4,11 @@ import (
 	"strconv"
 	MODEL "zero_blog/model"
 	SERIALIZER "zero_blog/serializer"
-
+	// "github.com/go-playground/validator/v10"
 	"github.com/gin-gonic/gin"
 )
 
-// UserMe 用户详情
+// 获取文章详情
 func GetArticle(ctx *gin.Context) {
 	articleIdString := ctx.Param("id")
 	articleId, errCon := strconv.Atoi(articleIdString)
@@ -24,39 +24,38 @@ func GetArticle(ctx *gin.Context) {
 		ctx.JSON(500, SERIALIZER.DBErr("详细内容获取异常!", err2))
 		return
 	}
-	res := SERIALIZER.BuildArticleResponse(info, content)
-	ctx.JSON(200, res)
-	return
-
+	ctx.JSON(200, SERIALIZER.BuildArticleResponse(info, content))
 }
 
-// /wechat/applet_login?code=xxx [get]  路由
-// 微信小程序登录
-// func AppletWeChatLogin(ctx *gin.Context) {
-// 	code := ctx.Query("code")         //  获取code
-// 	userName := ctx.Query("userName") //  获取code
+// 获取文章列表（不用包含详情）
+func GetArticles(ctx *gin.Context) {
+	articles, err := MODEL.GetArticles()
+	if err != nil {
+		ctx.JSON(500, SERIALIZER.DBErr("文章列表获取异常!", err))
+		return
+	}
+	ctx.JSON(200, SERIALIZER.Response{
+		Msg: "获取列表成功",
+		Data: SERIALIZER.BuildArticles(articles),
+	})
+}
 
-// 	// 根据code获取 openID 和 session_key
-// 	wxLoginResp, err := USER_SERVICE.WXLogin(code, userName)
-// 	if err != nil {
-// 		ctx.JSON(400, ErrorResponse(err))
-// 		return
-// 	}
-// 	// 保存登录态
-// 	session := sessions.Default(ctx)
-// 	session.Set("openid", wxLoginResp.OpenId)
-// 	session.Set("sessionKey", wxLoginResp.SessionKey)
-// 	// 这里用openid和sessionkey的串接 进行MD5之后作为该用户的自定义登录态
-// 	mySession := GetMD5Encode(wxLoginResp.OpenId + wxLoginResp.SessionKey)
-// 	// 接下来可以将openid 和 sessionkey, mySession 存储到数据库中,
-// 	// 但这里要保证mySession 唯一, 以便于用mySession去索引openid 和sessionkey
-// 	// c.String(100, mySession)
-// 	ctx.JSON(200, mySession)
-// }
-
-// 将一个字符串进行MD5加密后返回加密后的字符串
-// func GetMD5Encode(data string) string {
-// 	h := md5.New()
-// 	h.Write([]byte(data))
-// 	return hex.EncodeToString(h.Sum(nil))
-// }
+// 添加文章列表
+func AddArticle(ctx *gin.Context) {
+	var param = new(struct {
+		Title string `json:"title" binding:"required,max=30"`
+		Content string `json:"content" binding:"required"`
+	})
+	if err := ctx.ShouldBindJSON(param); err != nil {
+	 	ctx.JSON(433, SERIALIZER.DBErr("参数异常!", err))
+	 	return
+	}
+	if err := MODEL.AddArticle(param.Title, param.Content, 1);err != nil {
+		ctx.JSON(500, SERIALIZER.DBErr("添加失败!", err))
+		return 
+	}
+	ctx.JSON(200, SERIALIZER.Response{
+		Msg: "创建成功!",
+		Data: param,
+	})
+}
